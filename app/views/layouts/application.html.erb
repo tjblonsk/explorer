@@ -2,11 +2,9 @@
 <html>
 <head>
   <title>Explorer</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag    "style.css", :media => "all" %>
+  <%= javascript_include_tag "map.js" %>
   <%= csrf_meta_tags %>
-   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
-    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
 </head>
 <body>
   <%= link_to('Sign Up', new_user_registration_path)  %>
