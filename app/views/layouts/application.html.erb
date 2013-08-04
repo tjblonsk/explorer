@@ -2,18 +2,45 @@
 <html>
 <head>
   <title>Explorer</title>
-  <%= stylesheet_link_tag    "style.css", :media => "all" %>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <style type="text/css" media="all">
+    #map{width: 1200px; height:600px; border-radius: 5px; background-color: white; margin: auto;}
+  </style>
 </head>
 <body>
   <%= link_to('Sign Up', new_user_registration_path)  %>
-
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
   <div id="map"></div>
+  <script type="text/javascript" charset="utf-8">
+    // initialize the map on the "map" div
+    var map = new L.Map("map", {
+        center: new L.LatLng(40.85, -73.866),
+        zoom: 18
+    });
+   // create a tile layer (or use other provider of your choice)
+    L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>; contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>;, Imagery © <a href="http://cloudmade.com">;CloudMade</a>;',
+    maxZoom: 18
+    }).addTo(map);
+
+    // add tile layer, set the location and zoom
+    var bx = new L.LatLng(40.85, -73.866); // geographical point (longitude and latitude)
+    map.setView(bx, 10).addLayer(layer);
+
+    // create a marker in the given location and add it to the map
+    var markerLocation = bx;
+    var marker = new L.Marker(markerLocation);
+    map.addLayer(marker);
+  </script>
 
 <%= yield %>
 
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
 </body>
 </html>
