@@ -15,6 +15,10 @@
 //= require jquery_ujs
 //= require_tree .
 
-$(function(){
-    var map = L.map('map').setView([51.505, -0.09], 13);
-});
+// $(function(map){
+//     var map = L.map('map').setView([51.505, -0.09], 13);
+
+// });
+
+
+

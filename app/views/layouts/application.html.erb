@@ -6,23 +6,19 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <style type="text/css" media="all">
-    #map{width: 1000px; height:1000px; border-radius: 5px; background-color: red;}
+    #map{width: 1200px; height:600px; border-radius: 5px; background-color: white; margin: auto;}
   </style>
-  <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" />
-  <!--[if lte IE 8]>
-      <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
-  <![endif]-->
 </head>
 <body>
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <%= link_to('Sign Up', new_user_registration_path)  %>
+  <div id="map"></div>
 
-  <div id="map">
-
-  </div>
-  <script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
-  <script src="http://maps.stamen.com/js/tile.stamen.js"></script>
   <script type="text/javascript" charset="utf-8">
     // initialize the map on the "map" div
     var map = new L.Map("map", {
@@ -31,7 +27,11 @@
     });
    // create a tile layer (or use other provider of your choice)
     L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
+<<<<<<< HEAD
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+=======
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>; contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>;, Imagery © <a href="http://cloudmade.com">;CloudMade</a>;',
+>>>>>>> upstream/master
     maxZoom: 18
     }).addTo(map);
 
@@ -43,9 +43,17 @@
     var markerLocation = bx;
     var marker = new L.Marker(markerLocation);
     map.addLayer(marker);
+<<<<<<< HEAD
   </script>
+=======
+
+  </script>
+
+>>>>>>> upstream/master
 
 <%= yield %>
 
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
 </body>
 </html>
