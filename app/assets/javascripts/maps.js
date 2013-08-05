@@ -12,11 +12,7 @@ $('#map').click(function(event) {
       url: url,
       dataType: 'json'
     }).done(function(data){
-      console.log(data);
-     //  console.log('All good', response);
-    //  for (var i = 0; i < data.Search.length; i++) {
-    //     $('ul').append('<li>' + data.Search[i].Title + ", " + data.Search[i].Year + '</li>');
-    //   }
+
      });
   });
 
@@ -65,7 +61,7 @@ $(function () {
   var popup = L.popup();
   function onMapClick(e) {
     removeMarker();
-    console.log(e.latlng);
+
       EMAPS.latlng = e.latlng;
       // console.log(EMAPS.latlng);
       var lat = EMAPS.latlng.lat;
