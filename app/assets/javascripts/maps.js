@@ -1,8 +1,8 @@
 // Put your structure for the 'map' and all its functions up here somewhere
 var EMAPS = {
-  latlng: {},
-
+  latlng: {}
 };
+var markerArray = [];
 
 $('#map').click(function(event) {
     cord = EMAPS.latlng.val();
@@ -41,27 +41,33 @@ $(function () {
   map.setView(bx, 12).addLayer(layer);
 
   // create a marker in the given location and add it to the map
-  var markerLocation = bx;
-  var marker = new L.Marker(markerLocation);
-  map.addLayer(marker);
+  // var markerLocation = bx;
+  // var marker = new L.Marker(markerLocation);
+  // map.addLayer(marker);
 
   function setLocation(){
     for (var i = 0; i < squareInfo.response.venues.length; i ++){
       lat = squareInfo.response.venues[i].location.lat;
       lng = squareInfo.response.venues[i].location.lng;
-      console.log(i);
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
       map.addLayer(marker);
+      markerArray.push(marker);
+    }
+  }
+
+   function removeMarker(){
+    for (var i = 0; i < markerArray.length; i ++){
+      map.removeLayer(markerArray[i]);
     }
   }
 
   var popup = L.popup();
-
   function onMapClick(e) {
+    removeMarker();
     console.log(e.latlng);
       EMAPS.latlng = e.latlng;
-      console.log(EMAPS.latlng);
+      // console.log(EMAPS.latlng);
       var lat = EMAPS.latlng.lat;
       var lng = EMAPS.latlng.lng;
       var cord = lat + ',' + lng;
@@ -73,7 +79,10 @@ $(function () {
       }).done(function(data){
         squareInfo = data;
         setLocation();
-        console.log(data.response.venues);
+        var markerLocation = bx;
+        var marker = new L.Marker(markerLocation);
+        map.addLayer(marker);
+        // console.log(data.response.venues);
       popup
           .setLatLng(e.latlng)
           .setContent("Hi, I'm a work in progress. You clicked the map at " + e.latlng.toString())
