@@ -1,6 +1,7 @@
 // Put your structure for the 'map' and all its functions up here somewhere
 var EMAPS = {
-  latlng: {}
+  latlng: {},
+
 };
 
 $('#map').click(function(event) {
@@ -44,6 +45,16 @@ $(function () {
   var marker = new L.Marker(markerLocation);
   map.addLayer(marker);
 
+  function setLocation(){
+    for (var i = 0; i < squareInfo.response.venues.length; i ++){
+      lat = squareInfo.response.venues[i].location.lat;
+      lng = squareInfo.response.venues[i].location.lng;
+      console.log(i);
+      trend = new L.LatLng(lat, lng);
+      marker = new L.Marker(trend);
+      map.addLayer(marker);
+    }
+  }
 
   var popup = L.popup();
 
@@ -60,14 +71,15 @@ $(function () {
         url: url,
         dataType: 'json'
       }).done(function(data){
-        console.log(data);
+        squareInfo = data;
+        setLocation();
+        console.log(data.response.venues);
       popup
           .setLatLng(e.latlng)
-          .setContent("You clicked the map at " + e.latlng.toString())
+          .setContent("Hi, I'm a work in progress. You clicked the map at " + e.latlng.toString())
           .openOn(map);
     });
   }
   map.on('click', onMapClick);
-
 });
 
