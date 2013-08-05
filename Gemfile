@@ -8,6 +8,8 @@ gem "leaflet-rails"
 
 gem 'devise'
 gem 'jquery-rails'
+gem 'foursquare2'
+gem 'mapbox'
 
 group :production do
   gem 'pg'
