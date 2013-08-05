@@ -23,18 +23,40 @@
     // initialize the map on the "map" div
 
 
-    var map = L.map('map').setView([37.8, -96], 4);
+//     var map = L.map('map').setView([37.8, -96], 4);
 
-L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
-    key: 'BC9A493B41014CAABB98F0471D759707',
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>; contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>;, Imagery © <a href="http://cloudmade.com">;CloudMade</a>;',
-    styleId: 22677
-}).addTo(map);
 
- // add tile layer, set the location and zoom
-    var bx = new L.LatLng(40.85, -73.866); // geographical point (longitude and latitude)
+//   //  // create a tile layer (or use other provider of your choice)
+//     L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
 
-L.geoJson(statesData).addTo(map);
+//     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>; contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>;, Imagery © <a href="http://cloudmade.com">;CloudMade</a>;',
+
+//     maxZoom: 18
+//     }).addTo(map);
+
+
+// L.geoJson(statesData).addTo(map);
+
+// // function getColor(d) {
+// //     return  d > 10   ? '#800026' :
+// //                       '#800026';
+// // }
+
+// function style(feature) {
+//     return {
+//         // fillColor: getColor(feature.properties.density),
+//         weight: 2,
+//         opacity: 1,
+//         color: 'white',
+//         dashArray: '3',
+//         fillOpacity: 0
+//     };
+// }
+
+// L.geoJson(statesData, {style: style}).addTo(map);
+
+
+// var geojson;
 
 // function highlightFeature(e) {
 //     var layer = e.target;
@@ -43,34 +65,49 @@ L.geoJson(statesData).addTo(map);
 //         weight: 5,
 //         color: '#666',
 //         dashArray: '',
-//         fillOpacity: 0.7
+//         fillOpacity: 0.7,
+//         fillColor: 'white'
 //     });
 
+//     if (!L.Browser.ie && !L.Browser.opera) {
+//         layer.bringToFront();
+//     }
+// }
 
-  //   var map = new L.Map("map", {
-  //       center: new L.LatLng(37.8, -96),
-  //       zoom: 5
-  //   });
-  // //  // create a tile layer (or use other provider of your choice)
-  //   L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
+//     function resetHighlight(e) {
+//       geojson.resetStyle(e.target);
+// }
 
-  //   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>; contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>;, Imagery © <a href="http://cloudmade.com">;CloudMade</a>;',
+//     function zoomToFeature(e) {
+//       map.fitBounds(e.target.getBounds());
+//       console.log(e.latlng);
+//       e.target.setStyle({
+//         weight: 0,
+//         color: 'white',
+//         dashArray: '',
+//         opacity: 0,
+//         fillOpacity: 0,
+//         fillColor: 0,
+//         visibility: 'hidden'
+//     });
+//     }
 
-  //   maxZoom: 18
-  //   }).addTo(map);
+//     function onEachFeature(feature, layer) {
+//       layer.on({
+//         mouseover: highlightFeature,
+//         mouseout: resetHighlight,
+//         click: zoomToFeature
+//       });
+//     }
 
-  // //   // add tile layer, set the location and zoom
-  //   var bx = new L.LatLng(40.85, -73.866); // geographical point (longitude and latitude)
-  //   var center = new L.LatLng(37.8, -96);
-  //   map.setView(center, 5).addLayer(layer);
-
-  // //   // create a marker in the given location and add it to the map
-  //   var markerLocation = center;
-  //   var marker = new L.Marker(markerLocation);
-  //   map.addLayer(marker);
+//     geojson = L.geoJson(statesData, {
+//       style: style,
+//       onEachFeature: onEachFeature
+//     }).addTo(map);
 
 
-  // </script>
+
+//   // </script>
 
 
 
