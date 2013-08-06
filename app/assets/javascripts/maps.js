@@ -3,18 +3,19 @@ var EMAPS = {
   latlng: {}
 };
 var markerArray = [];
+var yelpData = "";
 
-$('#map').click(function(event) {
-    cord = EMAPS.latlng.val();
-    var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord;
-    $.ajax({
-      type: 'get',
-      url: url,
-      dataType: 'json'
-    }).done(function(data){
+// $('#map').click(function(event) {
+//     cord = EMAPS.latlng.val();
+//     var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord;
+//     $.ajax({
+//       type: 'get',
+//       url: url,
+//       dataType: 'json'
+//     }).done(function(data){
 
-     });
-  });
+//      });
+//   });
 
 // put JS code in here
 $(function () {
@@ -36,21 +37,41 @@ $(function () {
   var bx = new L.LatLng(40.715281, -73.990209); // geographical point (longitude and latitude)
   map.setView(bx, 12).addLayer(layer);
 
+
   // create a marker in the given location and add it to the map
   // var markerLocation = bx;
   // var marker = new L.Marker(markerLocation);
   // map.addLayer(marker);
 
+
+
   function setLocation(){
     for (var i = 0; i < squareInfo.response.venues.length; i ++){
       lat = squareInfo.response.venues[i].location.lat;
       lng = squareInfo.response.venues[i].location.lng;
+      place = squareInfo.response.venues[i].name;
+      address = squareInfo.response.venues[i].location.address + ', ' + squareInfo.response.venues[i].location.city + ', ' + squareInfo.response.venues[i].location.state;
+      // pic = 'https://api.foursquare.com/v2/venues/43695300f964a5208c291fe3/photos&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
+      // marker.bindPopup("<img src=" + pic + "/>").openPopup();
+      marker.bindPopup(place + ': ' + address).openPopup();
       map.addLayer(marker);
       markerArray.push(marker);
     }
   }
+
+  function getYelp(){
+     $.ajax({
+        type: 'get',
+        url: '/yelp',
+        dataType: 'json'
+      }).done(function(data){
+        console.log(data);
+        yelpData = data;
+      });
+  }
+
 
    function removeMarker(){
     for (var i = 0; i < markerArray.length; i ++){
@@ -58,9 +79,10 @@ $(function () {
     }
   }
 
-  var popup = L.popup();
+  // var popup = L.popup();
   function onMapClick(e) {
     removeMarker();
+    yelpData();
       EMAPS.latlng = e.latlng;
       // console.log(EMAPS.latlng);
       var lat = EMAPS.latlng.lat;
@@ -78,10 +100,10 @@ $(function () {
         var marker = new L.Marker(markerLocation);
         map.addLayer(marker);
         // console.log(data.response.venues);
-      popup
-          .setLatLng(e.latlng)
-          .setContent("Hi, I'm a work in progress. You clicked the map at " + e.latlng.toString())
-          .openOn(map);
+      // popup
+      //     .setLatLng(e.latlng)
+      //     .setContent("Hi, I'm a work in progress. You clicked the map at " + e.latlng.toString())
+      //     .openOn(map);
     });
   }
   map.on('click', onMapClick);
