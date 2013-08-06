@@ -42,14 +42,22 @@ $(function () {
   // map.setView(bx, 12).addLayer(layer);
 
 
-  //
+  //add marker to map
+    //place name
+    //place address
+    //place URL
+    //yelp info (rating, expensive)
+    //link to search for hotels nearyb
+    //link to search for real estate nearby
   function setLocation(){
     for (var i = 0; i < squareInfo.response.venues.length; i ++){
       lat = squareInfo.response.venues[i].location.lat;
       lng = squareInfo.response.venues[i].location.lng;
-
+      place = squareInfo.response.venues[i].name;
+      address = squareInfo.response.venues[i].location.address + ', ' + squareInfo.response.venues[i].location.city + ', ' + squareInfo.response.venues[i].location.state;
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
+      marker.bindPopup(place + ': ' + address).openPopup();
       map.addLayer(marker);
       markerArray.push(marker);
     }
@@ -62,7 +70,7 @@ $(function () {
   }
 
 
-  var popup = L.popup();
+  // var popup = L.popup();
   function onMapClick(e) {
     removeMarker();
     console.log(e.latlng);
