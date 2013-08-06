@@ -28,7 +28,7 @@ $(function () {
 
   // create a tile layer (or use other provider of your choice)
   var layer = L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>; contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>;, Imagery © <a href="http://cloudmade.com">;CloudMade</a>;',
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> Contributors: <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>Imagery © <a href="http://cloudmade.com">CloudMade</a>',
     maxZoom: 18
   }).addTo(map);
 
@@ -61,7 +61,6 @@ $(function () {
   var popup = L.popup();
   function onMapClick(e) {
     removeMarker();
-
       EMAPS.latlng = e.latlng;
       // console.log(EMAPS.latlng);
       var lat = EMAPS.latlng.lat;
