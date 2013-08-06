@@ -5,21 +5,21 @@ var EMAPS = {
 var squareInfo = '';
 var markerArray = [];
 
-$('#map').click(function(event) {
-    cord = EMAPS.latlng.val();
-    var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord;
-    $.ajax({
-      type: 'get',
-      url: url,
-      dataType: 'json'
-    }).done(function(data){
-      console.log(data);
-     //  console.log('All good', response);
-    //  for (var i = 0; i < data.Search.length; i++) {
-    //     $('ul').append('<li>' + data.Search[i].Title + ", " + data.Search[i].Year + '</li>');
-    //   }
-     });
-  });
+// $('#map').click(function(event) {
+//     cord = EMAPS.latlng.val();
+//     var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord;
+//     $.ajax({
+//       type: 'get',
+//       url: url,
+//       dataType: 'json'
+//     }).done(function(data){
+//       console.log(data);
+//      //  console.log('All good', response);
+//     //  for (var i = 0; i < data.Search.length; i++) {
+//     //     $('ul').append('<li>' + data.Search[i].Title + ", " + data.Search[i].Year + '</li>');
+//     //   }
+//      });
+//   });
 
 // put JS code in here
 $(function () {
@@ -27,7 +27,7 @@ $(function () {
   // initialize the map on the "map" div
   L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
   var map = new L.Map("map", {
-    center: new L.LatLng(40.85, -73.866),
+    center: new L.LatLng(40.748882568094665, -73.98931503295898),
     zoom: 18
   });
 
@@ -55,6 +55,7 @@ $(function () {
       lng = squareInfo.response.venues[i].location.lng;
       place = squareInfo.response.venues[i].name;
       address = squareInfo.response.venues[i].location.address + ', ' + squareInfo.response.venues[i].location.city + ', ' + squareInfo.response.venues[i].location.state;
+      // console.log(squareInfo.response.venues[i].categories[0].name);
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
       marker.bindPopup(place + ': ' + address).openPopup();
@@ -79,7 +80,8 @@ $(function () {
       var lat = EMAPS.latlng.lat;
       var lng = EMAPS.latlng.lng;
       var cord = lat + ',' + lng;
-      var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      // var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      var url = 'https://api.foursquare.com/v2/venues/explore?section=coffee&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
         $.ajax({
         type: 'get',
         url: url,
