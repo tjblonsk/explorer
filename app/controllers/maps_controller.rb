@@ -3,37 +3,37 @@ class MapsController < ApplicationController
   def index
   end
 
-  # def click
-  #   client = Foursquare2::Client.new(:client_id => ENV['FOURSQUARE_CLIENT_ID'], :client_secret => ENV['FOURSQUARE_CLIENT_SECRET'])
-  #   @click = client.search_venues(:ll => params[:], :query => 'bars')
-  # end
 
+  def save
+    @spotFave = Spot.create(
+      name: params[:name],
+      address: params[:address],
+      latitude: params[:latitude],
+      longitude: params[:longitude]
+    )
 
-
-
-
-
-
-
-
-
-
-
-
-  def foursquare
-    client = Foursquare2::Client.new(:client_id => ENV['FOURSQUARE_CLIENT_ID'], :client_secret => ENV['FOURSQUARE_CLIENT_SECRET'])
-    # if params[:location]
-      # @search = client.search_venues(:ll => '36.142064,-86.816086', :query =>'cafe')
-      # The code below is wrong but we want it to be right. Click to show trending places
-    # @search = client.trending_venues(:near => params[:location], :query =>  params[:place])
-      # @foursquare_id = @search.groups[0][:items].first[:id]
-      # @location =  Instagram.location_search(@foursquare_id).first
-      # @photos = Instagram.location_recent_media(@location.id, options = {count: 16})
+    current_user.spots << @spotFave
 
     respond_to do |format|
-      format.js {}
+      format.json {render json: @spotFave}
     end
   end
+
+
+  def favorite
+     @spots = current_user.spots
+      respond_to do |format|
+      format.html
+      format.json {render json: @spots}
+    end
+  end
+
+
+
+
+
+
+
 
   def yelp
     client = Yelp::Client.new

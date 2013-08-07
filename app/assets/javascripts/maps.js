@@ -7,23 +7,12 @@ var yelpData = "";
 var markerArray = [];
 var buttonClickValue = "";
 var spotsArray = [];
-
-
+var favoritesArray = "";
+var favoritesMarkerArray = [];
 
 
 // put JS code in here
 $(function () {
-
-  $('#map').on('click', '#faveButton', favoriteClick);
-
-  function favoriteClick(){
-    $('#faveButton').click(function(event){
-      event.preventDefault();
-      spotToSave = spotsArray[$('.placeName').attr('Id')];
-      console.log(spotToSave);
-    });
-  }
-
 
   // Call stuff down here somewhere
   // initialize the map on the "map" div
@@ -72,18 +61,33 @@ $(function () {
     buttonClickValue = trendingButton.text();
   });
 
+    $('#showFavoritesButton').click(function(event){
+      event.preventDefault();
+      buttonClickValue = "showFavorites";
+      console.log("click");
+     $.ajax({
+        type: 'get',
+        url: '/favorite',
+        dataType: 'json'
+      }).done(function(data){
+        console.log(data);
+        favoritesArray = data;
+      });
+    });
 
-    //Favorite;
 
+       //Show favorites
+    function setLocationFavorites(){
+    for (var i = 0; i < favoritesArray.length; i ++){
+      trend = new L.LatLng(favoritesArray[i].latitude, favoritesArray[i].longitude);
+      marker = new L.Marker(trend);
+      marker.bindPopup(favoritesArray[i].name).openPopup();
+      map.addLayer(marker);
+      favoritesMarkerArray.push(marker);
+    }
+  }
 
-
-  // // function for the click buttons?
-  // function clickButton(button){
-  //   event.preventDefault();
-  //   buttonClickValue = button.text();
-  //   $('.navbar').remove(buttonClickValue);
-  //   $('.navbar').append(buttonClickValue);
-  //   }
+    //Remove favorites layer below
 
 
   //add marker to map
@@ -137,6 +141,34 @@ $(function () {
     }
   }
 
+
+  function favoriteClick(){
+    $('#faveButton').click(function(event){
+      event.preventDefault();
+      spotToSave = spotsArray[$('.placeName').attr('Id')];
+      console.log(spotToSave);
+
+      var spotFave = {"name" : spotToSave.name,
+                      "latitude" : spotToSave.latitude,
+                      "longitude" : spotToSave.longitude,
+                      "address" : spotToSave.address
+                      };
+
+      $.ajax({
+        url: '/save',
+        dataType: 'json',
+        type: 'post',
+        data: spotFave
+      }).done(function(data){ // Handle the json response
+        console.log(data);
+      });
+    });
+  }
+
+  $('#map').on('click', '#faveButton', favoriteClick);
+
+
+
   // var popup = L.popup();
   function onMapClick(e) {
       removeMarker();
@@ -161,6 +193,8 @@ $(function () {
         squareInfo = data;
         if (buttonClickValue === "Trending"){
         setLocationTrending();
+        } else if (buttonClickValue === "showFavorites"){
+        setLocationFavorites();
         } else {
         setLocationOther();
        }
