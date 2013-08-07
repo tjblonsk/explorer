@@ -3,23 +3,9 @@ var EMAPS = {
   latlng: {}
 };
 var squareInfo = '';
+var yelpData = "";
 var markerArray = [];
-
-// $('#map').click(function(event) {
-//     cord = EMAPS.latlng.val();
-//     var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord;
-//     $.ajax({
-//       type: 'get',
-//       url: url,
-//       dataType: 'json'
-//     }).done(function(data){
-//       console.log(data);
-//      //  console.log('All good', response);
-//     //  for (var i = 0; i < data.Search.length; i++) {
-//     //     $('ul').append('<li>' + data.Search[i].Title + ", " + data.Search[i].Year + '</li>');
-//     //   }
-//      });
-//   });
+var buttonClickValue = "";
 
 // put JS code in here
 $(function () {
@@ -33,13 +19,58 @@ $(function () {
 
   // create a tile layer (or use other provider of your choice)
   var layer = L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>; contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>;, Imagery © <a href="http://cloudmade.com">;CloudMade</a>;',
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> Contributors: <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>Imagery © <a href="http://cloudmade.com">CloudMade</a>',
     maxZoom: 18
   }).addTo(map);
 
-  // add tile layer, set the location and zoom
-  // var bx = new L.LatLng(40.715281, -73.990209); // geographical point (longitude and latitude)
-  // map.setView(bx, 12).addLayer(layer);
+
+  function getYelp(){
+     $.ajax({
+        type: 'get',
+        url: '/yelp',
+        dataType: 'json'
+      }).done(function(data){
+        console.log(data);
+        yelpData = data;
+      });
+    }
+
+
+  var coffeeButton = $('#coffee');
+  var barsButton = $('#bars');
+  var trendingButton = $('#trending');
+
+   coffeeButton.click(function(event){
+    event.preventDefault();
+    console.log("clicked");
+    buttonClickValue = coffeeButton.text();
+    $('.navbar').remove(buttonClickValue);
+    $('.navbar').append(buttonClickValue);
+  });
+
+   barsButton.click(function(event){
+    event.preventDefault();
+    console.log("clicked");
+    buttonClickValue = barsButton.text();
+    $('.navbar').append(buttonClickValue);
+  });
+
+    trendingButton.click(function(event){
+    event.preventDefault();
+    console.log("clicked");
+    buttonClickValue = trendingButton.text();
+    $('.navbar').append(buttonClickValue);
+  });
+
+
+
+  // // function for the click buttons?
+  // function clickButton(button){
+  //   event.preventDefault();
+  //   buttonClickValue = button.text();
+  //   $('.navbar').remove(buttonClickValue);
+  //   $('.navbar').append(buttonClickValue);
+  //   }
 
 
   //add marker to map
@@ -49,13 +80,14 @@ $(function () {
     //yelp info (rating, expensive)
     //link to search for hotels nearyb
     //link to search for real estate nearby
-  function setLocation(){
+  function setLocationTrending(){
+    //////trending
     for (var i = 0; i < squareInfo.response.venues.length; i ++){
       lat = squareInfo.response.venues[i].location.lat;
       lng = squareInfo.response.venues[i].location.lng;
       place = squareInfo.response.venues[i].name;
       address = squareInfo.response.venues[i].location.address + ', ' + squareInfo.response.venues[i].location.city + ', ' + squareInfo.response.venues[i].location.state;
-      // console.log(squareInfo.response.venues[i].categories[0].name);
+      // pic = 'https://api.foursquare.com/v2/venues/43695300f964a5208c291fe3/photos&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
       marker.bindPopup(place + ': ' + address).openPopup();
@@ -64,24 +96,41 @@ $(function () {
     }
   }
 
-  function removeMarker(){
+    /////// For coffee shops
+    function setLocationOther(){
+    for (var i = 0; i < squareInfo.response.groups[0].items.length; i ++){
+      lat = squareInfo.response.groups[0].items[i].venue.location.lat;
+      lng = squareInfo.response.groups[0].items[i].venue.location.lng;
+      place = squareInfo.response.groups[0].items[i].venue.name;
+      trend = new L.LatLng(lat, lng);
+      marker = new L.Marker(trend);
+      marker.bindPopup(place).openPopup();
+      map.addLayer(marker);
+      markerArray.push(marker);
+    }
+  }
+
+   function removeMarker(){
     for (var i = 0; i < markerArray.length; i ++){
       map.removeLayer(markerArray[i]);
     }
   }
 
-
   // var popup = L.popup();
   function onMapClick(e) {
     removeMarker();
-    console.log(e.latlng);
       EMAPS.latlng = e.latlng;
-      console.log(EMAPS.latlng);
       var lat = EMAPS.latlng.lat;
       var lng = EMAPS.latlng.lng;
       var cord = lat + ',' + lng;
-      // var url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
-      var url = 'https://api.foursquare.com/v2/venues/explore?section=coffee&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      var url = "";
+      if (buttonClickValue === "Trending"){
+        url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Coffee"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=coffee&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else {
+        url = 'https://api.foursquare.com/v2/venues/explore?section=bars&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      }
         $.ajax({
         type: 'get',
         url: url,
@@ -89,10 +138,24 @@ $(function () {
       }).done(function(data){
         console.log(data);
         squareInfo = data;
-        setLocation();
+        if (buttonClickValue === "Trending"){
+        setLocationTrending();
+        } else {
+        setLocationOther();
+       }
     });
   }
   map.on('click', onMapClick);
+
+
+
+
+
+
+
+
+
+
 
 });
 

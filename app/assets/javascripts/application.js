@@ -18,18 +18,6 @@
 
 
 
-//load up the window
-$(function(){
-
-// map.on('click', function(e) {
-//     console.log(e.latlng);
-// });
-
-
-
-});
-
-
 
 
 

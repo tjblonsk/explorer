@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 
 gem "leaflet-rails"
+gem 'expedia'
+gem 'yelpster'
 
 
 # Bundle edge Rails instead:
