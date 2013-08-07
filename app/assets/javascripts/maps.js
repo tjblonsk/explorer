@@ -6,9 +6,25 @@ var squareInfo = '';
 var yelpData = "";
 var markerArray = [];
 var buttonClickValue = "";
+var spotsArray = [];
+
+
+
 
 // put JS code in here
 $(function () {
+
+  $('#map').on('click', '#faveButton', favoriteClick);
+
+  function favoriteClick(){
+    $('#faveButton').click(function(event){
+      event.preventDefault();
+      spotToSave = spotsArray[$('.placeName').attr('Id')];
+      console.log(spotToSave);
+    });
+  }
+
+
   // Call stuff down here somewhere
   // initialize the map on the "map" div
   L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
@@ -42,25 +58,22 @@ $(function () {
 
    coffeeButton.click(function(event){
     event.preventDefault();
-    console.log("clicked");
     buttonClickValue = coffeeButton.text();
-    $('.navbar').remove(buttonClickValue);
     $('.navbar').append(buttonClickValue);
   });
 
    barsButton.click(function(event){
     event.preventDefault();
-    console.log("clicked");
     buttonClickValue = barsButton.text();
-    $('.navbar').append(buttonClickValue);
   });
 
     trendingButton.click(function(event){
     event.preventDefault();
-    console.log("clicked");
     buttonClickValue = trendingButton.text();
-    $('.navbar').append(buttonClickValue);
   });
+
+
+    //Favorite;
 
 
 
@@ -87,10 +100,17 @@ $(function () {
       lng = squareInfo.response.venues[i].location.lng;
       place = squareInfo.response.venues[i].name;
       address = squareInfo.response.venues[i].location.address + ', ' + squareInfo.response.venues[i].location.city + ', ' + squareInfo.response.venues[i].location.state;
-      // pic = 'https://api.foursquare.com/v2/venues/43695300f964a5208c291fe3/photos&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      placeHash = {};
+      placeHash['name']= place;
+      placeHash['latitude']= lat;
+      placeHash['longitude']= lng;
+      placeHash['address']= address;
+      spotsArray.push(placeHash);
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
-      marker.bindPopup(place + ': ' + address).openPopup();
+      popup = L.popup()
+      .setContent('<p class="placeName" id="'+ i +'">' + place + '</p><br/><p>' + address + '</p><br/><button id="faveButton">fave</button>w');
+      marker.bindPopup(popup).openPopup();
       map.addLayer(marker);
       markerArray.push(marker);
     }
@@ -110,6 +130,7 @@ $(function () {
     }
   }
 
+
    function removeMarker(){
     for (var i = 0; i < markerArray.length; i ++){
       map.removeLayer(markerArray[i]);
@@ -118,7 +139,7 @@ $(function () {
 
   // var popup = L.popup();
   function onMapClick(e) {
-    removeMarker();
+      removeMarker();
       EMAPS.latlng = e.latlng;
       var lat = EMAPS.latlng.lat;
       var lng = EMAPS.latlng.lng;
@@ -146,16 +167,6 @@ $(function () {
     });
   }
   map.on('click', onMapClick);
-
-
-
-
-
-
-
-
-
-
 
 });
 

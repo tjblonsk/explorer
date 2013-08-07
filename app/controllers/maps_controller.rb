@@ -8,6 +8,18 @@ class MapsController < ApplicationController
   #   @click = client.search_venues(:ll => params[:], :query => 'bars')
   # end
 
+
+
+
+
+
+
+
+
+
+
+
+
   def foursquare
     client = Foursquare2::Client.new(:client_id => ENV['FOURSQUARE_CLIENT_ID'], :client_secret => ENV['FOURSQUARE_CLIENT_SECRET'])
     # if params[:location]
