@@ -13,12 +13,18 @@ var defaultCitiesArray = "";
 var defaultCitiesMarkerArray = [];
 
 
+
 // put JS code in here
 $(function () {
 
   var map = new L.Map('map');
 
-  // var markers = new L.MarkerClusterGroup();
+  function markerClicked() {
+  console.log(this.getLatLng().lat);
+  lat = this.getLatLng().lat;
+  lng = this.getLatLng().lng;
+  map.setView(new L.LatLng(lat, lng), 13);
+}
 
   function showCities(){
      $.ajax({
@@ -32,12 +38,11 @@ $(function () {
           marker = new L.Marker(trend);
           marker.bindPopup(defaultCitiesArray[i].name).openPopup();
           map.addLayer(marker);
+          marker.on('click', markerClicked);
           defaultCitiesMarkerArray.push(marker);
         }
       });
     }
-
-
 
  // create a tile layer (or use other provider of your choice)
   var layer = L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
@@ -234,5 +239,10 @@ $(function () {
   map.on('click', onMapClick);
 
 });
+
+
+
+
+
 
 
