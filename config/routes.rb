@@ -7,4 +7,6 @@ Explorer::Application.routes.draw do
 
   get '/favorite', to: 'maps#favorite'
 
+  get '/show/cities', to: 'maps#show_cities'
+
 end

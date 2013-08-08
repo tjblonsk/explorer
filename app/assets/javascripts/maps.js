@@ -2,31 +2,62 @@
 var EMAPS = {
   latlng: {}
 };
-var squareInfo = '';
+var squareInfo = "";
 var yelpData = "";
 var markerArray = [];
 var buttonClickValue = "";
 var spotsArray = [];
 var favoritesArray = "";
 var favoritesMarkerArray = [];
+var defaultCitiesArray = "";
+var defaultCitiesMarkerArray = [];
 
 
 // put JS code in here
 $(function () {
 
-  // Call stuff down here somewhere
-  // initialize the map on the "map" div
-  L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
-  var map = new L.Map("map", {
-    center: new L.LatLng(40.748882568094665, -73.98931503295898),
-    zoom: 18
-  });
+  var map = new L.Map('map');
 
-  // create a tile layer (or use other provider of your choice)
+  // var markers = new L.MarkerClusterGroup();
+
+  function showCities(){
+     $.ajax({
+        type: 'get',
+        url: '/show/cities',
+        dataType: 'json'
+      }).done(function(data){
+        defaultCitiesArray = data;
+        for(var i = 0; i < defaultCitiesArray.length; i ++){
+          trend = new L.LatLng(defaultCitiesArray[i].latitude, defaultCitiesArray[i].longitude);
+          marker = new L.Marker(trend);
+          marker.bindPopup(defaultCitiesArray[i].name).openPopup();
+          map.addLayer(marker);
+          defaultCitiesMarkerArray.push(marker);
+        }
+      });
+    }
+
+
+
+ // create a tile layer (or use other provider of your choice)
   var layer = L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> Contributors: <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>Imagery © <a href="http://cloudmade.com">CloudMade</a>',
     maxZoom: 18
   }).addTo(map);
+
+  // Call stuff down here somewhere
+  // initialize the map on the "map" div
+  L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
+
+  map.on('load', function(e) {
+      console.log("loaded");
+      showCities();
+    });
+
+  map.setView(new L.LatLng(37.8, -96), 5);
+
+
+
 
 
   function getYelp(){
@@ -56,7 +87,7 @@ $(function () {
     buttonClickValue = barsButton.text();
   });
 
-    trendingButton.click(function(event){
+  trendingButton.click(function(event){
     event.preventDefault();
     buttonClickValue = trendingButton.text();
   });
