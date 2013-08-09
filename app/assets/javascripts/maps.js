@@ -13,6 +13,7 @@ var defaultCitiesArray = "";
 var defaultCitiesMarkerArray = [];
 var nearbyHotelsArray = [];
 var placeHash = "";
+var yelpObject = "";
 
 
 // put JS code in here
@@ -168,7 +169,9 @@ $(function () {
         console.log("sent");
         console.log(data);
         yelpObject = data;
-        console.log($('.leaflet-popup-content').text());
+        $('.leaflet-popup-content').text("");
+        $('.leaflet-popup-content').append('<div><img src=' + yelpObject.businesses[0].rating_img_url_small + ' /></div>');
+        $('.leaflet-popup-content').append('<div><img src=' + yelpObject.businesses[0].image_url + ' /></div><hr><p>HI this is a review</p>');
       });
     }
 
