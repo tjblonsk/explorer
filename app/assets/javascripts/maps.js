@@ -143,10 +143,13 @@ $(function () {
       placeHash['longitude']= lng;
       placeHash['address']= address;
       placeHash['city']= city;
+      console.log(city);
       placeHash['state']= state;
+      console.log(state);
+      if (phone != 'undefined') {
       placeHash['phone']= phone;
+      }
       placeHash['website']= website;
-      console.log(placeHash);
       spotsArray.push(placeHash);
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
@@ -216,7 +219,11 @@ $(function () {
       var spotFave = {"name" : spotToSave.name,
                       "latitude" : spotToSave.latitude,
                       "longitude" : spotToSave.longitude,
-                      "address" : spotToSave.address
+                      "address" : spotToSave.address,
+                      "city" : spotToSave.city,
+                      "state" : spotToSave.state,
+                      "phone" : spotToSave.phone,
+                      "website" : spotToSave.website
                       };
 
       $.ajax({
