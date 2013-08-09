@@ -27,6 +27,8 @@ ActiveRecord::Schema.define(:version => 20130808122913) do
   create_table "spots", :force => true do |t|
     t.string   "name"
     t.string   "address"
+    t.string   "phone"
+    t.string   "website"
     t.float    "latitude"
     t.float    "longitude"
     t.integer  "user_id"

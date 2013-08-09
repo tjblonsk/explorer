@@ -9,9 +9,18 @@ class MapsController < ApplicationController
       name: params[:name],
       address: params[:address],
       latitude: params[:latitude],
-      longitude: params[:longitude]
+      longitude: params[:longitude],
+      phone: params[:phone],
+      website: params[:website]
       )
+     city_name = params[:city]
+     state = params[:state]
+     city_to_search = city_name + ', ' + state
+     @city = City.where(name: city_to_search)
+     @city.spots << @spotFave
+     @city.favorite = true
 
+    current_user.cities << @city
     current_user.spots << @spotFave
 
     respond_to do |format|
