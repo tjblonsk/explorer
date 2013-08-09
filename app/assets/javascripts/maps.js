@@ -167,11 +167,10 @@ $(function () {
       }).done(function(data){
         console.log("sent");
         console.log(data);
-
+        yelpObject = data;
+        console.log($('.leaflet-popup-content').text());
       });
     }
-
-
 
 
     /////// For coffee shops
