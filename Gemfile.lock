@@ -28,9 +28,11 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    addressable (2.3.5)
     arel (3.0.2)
     bcrypt-ruby (3.1.1)
     builder (3.0.4)
+    coderay (1.0.9)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -38,7 +40,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
-    devise (3.0.0)
+    colorize (0.5.8)
+    devise (3.0.1)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -46,8 +49,13 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
-    faraday (0.8.7)
-      multipart-post (~> 1.1)
+    expedia (0.0.1)
+      addressable (~> 2.2)
+      colorize (~> 0.5.8)
+      faraday (~> 0.8)
+      multi_json (~> 1.3)
+    faraday (0.8.8)
+      multipart-post (~> 1.2.0)
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     foursquare2 (1.9.7)
@@ -67,12 +75,18 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mapbox (0.1.0)
+    method_source (0.8.2)
     mime-types (1.23)
-    multi_json (1.7.7)
+    multi_json (1.7.8)
     multipart-post (1.2.0)
+    oauth (0.4.7)
     orm_adapter (0.4.0)
-    pg (0.15.1)
+    pg (0.16.0)
     polyglot (0.3.3)
+    pry (0.9.12.2)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -103,6 +117,7 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
+    slop (3.4.6)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -120,6 +135,9 @@ GEM
       multi_json (~> 1.0, >= 1.0.2)
     warden (1.2.3)
       rack (>= 1.0)
+    yelpster (1.1.4)
+      json (>= 1.1.1)
+      oauth (>= 0.4.5)
 
 PLATFORMS
   ruby
@@ -127,12 +145,15 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   devise
+  expedia
   foursquare2
   jquery-rails
   leaflet-rails
   mapbox
   pg
+  pry
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)
+  yelpster
