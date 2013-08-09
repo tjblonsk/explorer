@@ -10,7 +10,7 @@ class MapsController < ApplicationController
       address: params[:address],
       latitude: params[:latitude],
       longitude: params[:longitude]
-    )
+      )
 
     current_user.spots << @spotFave
 
@@ -39,17 +39,23 @@ class MapsController < ApplicationController
 
 
 
-  def yelp
+  def send_yelp
+    @searchSpot = Spot.create(
+      name: params[:name],
+      latitude: params[:latitude],
+      longitude: params[:longitude]
+    )
     client = Yelp::Client.new
     request = GeoPoint.new(
-             term: "hotels",
-             latitude: 40.85,
-             longitude: -73.990209,
-             limit: 12,
-             consumer_key: 'mcTXlE828xeks7ESsscUSA',
-             consumer_secret: 'xU1QsQowBpjeyoQWPFVzU3jIXPk',
-             token: 'OhsIeHQUElHFM8Dazjn2q9k_eDEpo0oF',
-             token_secret: 'bAwOoJMhBUaPNYEcznrNYtwI4Io')
+           :term => @searchSpot.name,
+           :latitude => @searchSpot.latitude,
+           :longitude => @searchSpot.longitude,
+           limit: 1,
+           consumer_key: 'mcTXlE828xeks7ESsscUSA',
+           consumer_secret: 'xU1QsQowBpjeyoQWPFVzU3jIXPk',
+           token: 'OhsIeHQUElHFM8Dazjn2q9k_eDEpo0oF',
+           token_secret: 'bAwOoJMhBUaPNYEcznrNYtwI4Io')
+
     @response = client.search(request)
 
     respond_to do |format|

@@ -9,4 +9,6 @@ Explorer::Application.routes.draw do
 
   get '/show/cities', to: 'maps#show_cities'
 
+  post '/send', to: 'maps#send_yelp'
+
 end

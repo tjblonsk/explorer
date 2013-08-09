@@ -11,7 +11,8 @@ var favoritesArray = "";
 var favoritesMarkerArray = [];
 var defaultCitiesArray = "";
 var defaultCitiesMarkerArray = [];
-
+var nearbyHotelsArray = [];
+var placeHash = "";
 
 
 // put JS code in here
@@ -55,27 +56,10 @@ $(function () {
   L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
 
   map.on('load', function(e) {
-      console.log("loaded");
       showCities();
     });
 
   map.setView(new L.LatLng(37.8, -96), 5);
-
-
-
-
-
-  function getYelp(){
-     $.ajax({
-        type: 'get',
-        url: '/yelp',
-        dataType: 'json'
-      }).done(function(data){
-        console.log(data);
-        yelpData = data;
-      });
-    }
-
 
   var coffeeButton = $('#coffee');
   var barsButton = $('#bars');
@@ -84,18 +68,23 @@ $(function () {
    coffeeButton.click(function(event){
     event.preventDefault();
     buttonClickValue = coffeeButton.text();
-    $('.navbar').append(buttonClickValue);
+    coffeeButton.on('click', removeMarker());
+    // $('.navbar').append(buttonClickValue);
   });
 
    barsButton.click(function(event){
     event.preventDefault();
     buttonClickValue = barsButton.text();
+    barsButton.on('click', removeMarker());
   });
 
   trendingButton.click(function(event){
     event.preventDefault();
     buttonClickValue = trendingButton.text();
+    trendingButton.on('click', removeMarker());
   });
+
+
 
     $('#showFavoritesButton').click(function(event){
       event.preventDefault();
@@ -109,6 +98,8 @@ $(function () {
         console.log(data);
         favoritesArray = data;
       });
+      $('#showFavoritesButton').on('click', removeMarker());
+      $('#showFavoritesButton').on('click', setLocationFavorites());
     });
 
 
@@ -124,6 +115,7 @@ $(function () {
   }
 
     //Remove favorites layer below
+    function removeFavoritesLayer(){}
 
 
   //add marker to map
@@ -134,7 +126,7 @@ $(function () {
     //link to search for hotels nearyb
     //link to search for real estate nearby
   function setLocationTrending(){
-    //////trending
+    //////trending or hotels
     for (var i = 0; i < squareInfo.response.venues.length; i ++){
       lat = squareInfo.response.venues[i].location.lat;
       lng = squareInfo.response.venues[i].location.lng;
@@ -149,12 +141,38 @@ $(function () {
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
       popup = L.popup()
-      .setContent('<p class="placeName" id="'+ i +'">' + place + '</p><br/><p>' + address + '</p><br/><button id="faveButton">fave</button>w');
+      .setContent('<p class="placeName" id="'+ i +'">' + place + '</p><br/><p>' + address + '</p><br/><button id="faveButton">fave</button></br><button id="hotelsButton">nearby hotels</button></br><button id="yelpButton">yelp review</button>');
       marker.bindPopup(popup).openPopup();
       map.addLayer(marker);
       markerArray.push(marker);
     }
   }
+
+  $('#map').on('click', '#yelpButton', sendYelp);
+
+
+    //send the object to be used in the yelp request to the controller
+    function sendYelp(){
+      objectForYelp = spotsArray[$('.placeName').attr('Id')];
+      console.log(objectForYelp);
+      var searchSpot = {"name" : objectForYelp.name,
+                      "latitude" : objectForYelp.latitude,
+                      "longitude" : objectForYelp.longitude
+                      };
+      $.ajax({
+        url: '/send',
+        dataType: 'json',
+        type: 'post',
+        data: searchSpot
+      }).done(function(data){
+        console.log("sent");
+        console.log(data);
+
+      });
+    }
+
+
+
 
     /////// For coffee shops
     function setLocationOther(){
@@ -205,6 +223,41 @@ $(function () {
 
 
 
+
+
+    //click hotel button to show nearby hotels
+    function hotelButtonClick(){
+      $('#hotelsButton').click(function(event){
+      event.preventDefault();
+      placeToSearch = spotsArray[$('.placeName').attr('Id')];
+      placeToSearch.lat = lat;
+      placeToSearch.lng = lng;
+      cord = lat +','+ lng;
+      url = 'https://api.foursquare.com/v2/venues/search?categoryId=4bf58dd8d48988d1fa931735&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+       $.ajax({
+        type: 'get',
+        url: url,
+        dataType: 'json'
+      }).done(function(data){
+        console.log(data);
+        nearbyHotelsArray = data.response.venues;
+        removeMarker();
+        for(var i = 0; i < nearbyHotelsArray.length; i ++){
+          trend = new L.LatLng(nearbyHotelsArray[i].location.lat, nearbyHotelsArray[i].location.lng);
+          marker = new L.Marker(trend);
+          marker.bindPopup(nearbyHotelsArray[i].name).openPopup();
+          map.addLayer(marker);
+          markerArray.push(marker);
+          buttonClickValue = "hotels";
+          console.log(buttonClickValue);
+          }
+        });
+      });
+    }
+
+  $('#map').on('click', '#hotelsButton', hotelButtonClick);
+
+
   // var popup = L.popup();
   function onMapClick(e) {
       removeMarker();
@@ -217,6 +270,8 @@ $(function () {
         url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       } else if (buttonClickValue === "Coffee"){
         url = 'https://api.foursquare.com/v2/venues/explore?section=coffee&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "hotels"){
+        url = 'https://api.foursquare.com/v2/venues/search?categoryId=4bf58dd8d48988d1fa931735&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       } else {
         url = 'https://api.foursquare.com/v2/venues/explore?section=bars&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       }
@@ -229,8 +284,8 @@ $(function () {
         squareInfo = data;
         if (buttonClickValue === "Trending"){
         setLocationTrending();
-        } else if (buttonClickValue === "showFavorites"){
-        setLocationFavorites();
+        } else if (buttonClickValue === "hotels") {
+        setLocationTrending();
         } else {
         setLocationOther();
        }
