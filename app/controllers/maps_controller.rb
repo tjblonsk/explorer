@@ -109,14 +109,5 @@ def destroy
   end
 end
 
-  # def expedia
-  #   # Instentiate api object
-  #   api = Expedia::Api.new
 
-  #   # Method to search for a hotel. see http://developer.ean.com/docs/read/hotels/version_3/request_hotel_list
-  #   response = api.get_list({:propertyName => 'Hotel Moa Berlin', :destinationString => 'berlin'})
-
-  #   # execute this method to know if there is any exception
-  #   response.exception? # false if success
-  # end
 end
