@@ -87,61 +87,19 @@ $(function () {
     topPicksButton
     ];
 
-
-
-  coffeeButton.on('click', searchButtonClick(coffeeButton));
+    for(var i = 0; i < buttonArray.length; i ++){
+      buttonArray[i].on('click', searchButtonClick(buttonArray[i]));
+    }
 
 
    function searchButtonClick(button){
-    event.preventDefault();
+    button.click(function(event){
+     event.preventDefault();
     buttonClickValue = button.text();
-    removeMarker();
+    button.on('click', removeMarker());
     console.log(button.text());
+    });
    }
-
-   barsButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = barsButton.text();
-    barsButton.on('click', removeMarker());
-  });
-
-  trendingButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = trendingButton.text();
-    trendingButton.on('click', removeMarker());
-  });
-
- foodButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = foodButton.text();
-    trendingButton.on('click', removeMarker());
-  });
-
-  trendingButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = trendingButton.text();
-    trendingButton.on('click', removeMarker());
-  });
-   trendingButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = trendingButton.text();
-    trendingButton.on('click', removeMarker());
-  });
-    trendingButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = trendingButton.text();
-    trendingButton.on('click', removeMarker());
-  });
-     trendingButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = trendingButton.text();
-    trendingButton.on('click', removeMarker());
-  });
-      trendingButton.click(function(event){
-    event.preventDefault();
-    buttonClickValue = trendingButton.text();
-    trendingButton.on('click', removeMarker());
-  });
 
 
     $('#showFavoritesButton').click(function(event){
