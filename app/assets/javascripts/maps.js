@@ -181,6 +181,7 @@ $(function () {
 
     //send the object to be used in the yelp request to the controller
     function sendYelp(){
+      $('#yelpButton').remove();
       objectForYelp = spotsArray[$('.placeName').attr('Id')];
       console.log(objectForYelp);
       var searchSpot = {"name" : objectForYelp.name,
@@ -199,6 +200,7 @@ $(function () {
         $('.leaflet-popup-content').text("");
         $('.leaflet-popup-content').append('<div><img src=' + yelpObject.businesses[0].rating_img_url_small + ' /></div>');
         $('.leaflet-popup-content').append('<div><img src=' + yelpObject.businesses[0].image_url + ' /></div><hr><p>HI this is a review</p>');
+        $('.leaflet-popup-content').append('<p class="placeName" id="'+ i +'">' + objectForYelp.name + '</p><br/><button id="faveButton">fave</button></br><button id="hotelsButton">nearby hotels</button>');
       });
     }
 
@@ -298,9 +300,33 @@ $(function () {
         nearbyHotelsArray = data.response.venues;
         removeMarker();
         for(var i = 0; i < nearbyHotelsArray.length; i ++){
-          trend = new L.LatLng(nearbyHotelsArray[i].location.lat, nearbyHotelsArray[i].location.lng);
+          lat = nearbyHotelsArray[i].location.lat;
+          lng = nearbyHotelsArray[i].location.lng;
+          place = nearbyHotelsArray[i].name;
+          city = nearbyHotelsArray[i].location.city;
+          state = nearbyHotelsArray[i].location.state;
+          address = nearbyHotelsArray[i].location.address;
+          phone = nearbyHotelsArray[i].contact.formattedPhone;
+          website = nearbyHotelsArray[i].url;
+          placeHash = {};
+          placeHash['name']= place;
+          placeHash['latitude']= lat;
+          placeHash['longitude']= lng;
+          placeHash['address']= address;
+          placeHash['city']= city;
+          console.log(city);
+          placeHash['state']= state;
+          console.log(state);
+          if (phone != 'undefined') {
+          placeHash['phone']= phone;
+          }
+          placeHash['website']= website;
+          spotsArray.push(placeHash);
+          trend = new L.LatLng(lat, lng);
           marker = new L.Marker(trend);
-          marker.bindPopup(nearbyHotelsArray[i].name).openPopup();
+          popup = L.popup()
+          .setContent('<p class="placeName" id="'+ i +'">' + place + '</p><br/><p>' + address + '</p><br/><button id="faveButton">fave</button></br><button id="yelpButton">yelp review</button>');
+          marker.bindPopup(popup).openPopup();
           map.addLayer(marker);
           markerArray.push(marker);
           buttonClickValue = "hotels";
