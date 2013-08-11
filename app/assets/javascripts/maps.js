@@ -209,13 +209,30 @@ $(function () {
       lat = squareInfo.response.groups[0].items[i].venue.location.lat;
       lng = squareInfo.response.groups[0].items[i].venue.location.lng;
       place = squareInfo.response.groups[0].items[i].venue.name;
-      // city = squareInfo.response.groups[0].items[i].venue.location.city;
-      // state = squareInfo.response.groups[0].items[i].venue.location.state;
-      // address = squareInfo.response.venues[i].location.address + ', ' + squareInfo.response.venues[i].location.city + ', ' + squareInfo.response.venues[i].location.state;
-      // phone =
+      city = squareInfo.response.groups[0].items[i].venue.location.city;
+      state = squareInfo.response.groups[0].items[i].venue.location.state;
+      address = squareInfo.response.groups[0].items[i].venue.location.address + ', ' + city + ', ' + state;
+      phone = squareInfo.response.groups[0].items[i].venue.formattedPhone;
+      website = squareInfo.response.groups[0].items[i].venue.url;
+      placeHash = {};
+      placeHash['name']= place;
+      placeHash['latitude']= lat;
+      placeHash['longitude']= lng;
+      placeHash['address']= address;
+      placeHash['city']= city;
+      console.log(city);
+      placeHash['state']= state;
+      console.log(state);
+      if (phone != 'undefined') {
+      placeHash['phone']= phone;
+      }
+      placeHash['website']= website;
+      spotsArray.push(placeHash);
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
-      marker.bindPopup(place).openPopup();
+      popup = L.popup()
+      .setContent('<p class="placeName" id="'+ i +'">' + place + '</p><br/><p>' + address + '</p><br/><button id="faveButton">fave</button></br><button id="hotelsButton">nearby hotels</button></br><button id="yelpButton">yelp review</button>');
+      marker.bindPopup(popup).openPopup();
       map.addLayer(marker);
       markerArray.push(marker);
     }
