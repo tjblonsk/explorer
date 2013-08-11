@@ -209,6 +209,10 @@ $(function () {
       lat = squareInfo.response.groups[0].items[i].venue.location.lat;
       lng = squareInfo.response.groups[0].items[i].venue.location.lng;
       place = squareInfo.response.groups[0].items[i].venue.name;
+      // city = squareInfo.response.groups[0].items[i].venue.location.city;
+      // state = squareInfo.response.groups[0].items[i].venue.location.state;
+      // address = squareInfo.response.venues[i].location.address + ', ' + squareInfo.response.venues[i].location.city + ', ' + squareInfo.response.venues[i].location.state;
+      // phone =
       trend = new L.LatLng(lat, lng);
       marker = new L.Marker(trend);
       marker.bindPopup(place).openPopup();
@@ -306,8 +310,22 @@ $(function () {
         url = 'https://api.foursquare.com/v2/venues/explore?section=coffee&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       } else if (buttonClickValue === "hotels"){
         url = 'https://api.foursquare.com/v2/venues/search?categoryId=4bf58dd8d48988d1fa931735&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Bars"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=drinks&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Food"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=food&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Shops"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=shops&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Arts"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=arts&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Outdoors"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=outdoors&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Sights"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=sights&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+      } else if (buttonClickValue === "Top Picks"){
+        url = 'https://api.foursquare.com/v2/venues/explore?section=topPicks&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       } else {
-        url = 'https://api.foursquare.com/v2/venues/explore?section=bars&ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
+        url = 'https://api.foursquare.com/v2/venues/trending?ll=' + cord + '&client_id=FLORXQIYM4IR2BQJQS52RRKJIDTIYE3PVGUXPAEOCRLPLTMF&client_secret=0E30B1EZG3RQK0UMKPIU05LNMSZOOAKVBR4QFOJFO1KAGEEG&v=20130316';
       }
         $.ajax({
         type: 'get',
@@ -316,9 +334,7 @@ $(function () {
       }).done(function(data){
         console.log(data);
         squareInfo = data;
-        if (buttonClickValue === "Trending"){
-        setLocationTrending();
-        } else if (buttonClickValue === "hotels") {
+        if (buttonClickValue === ("Trending" || "hotels")){
         setLocationTrending();
         } else {
         setLocationOther();
