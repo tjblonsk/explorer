@@ -97,6 +97,11 @@ $(function () {
      event.preventDefault();
     buttonClickValue = button.text();
     button.on('click', removeMarker());
+    $('h1').text(buttonClickValue);
+    $('h1').show();
+    $('#map').show();
+    $('#favoriteCities').hide();
+    $('#faveCitiesButton').show();
     console.log(button.text());
     });
    }
@@ -117,6 +122,16 @@ $(function () {
       $('#showFavoritesButton').on('click', removeMarker());
       $('#showFavoritesButton').on('click', setLocationFavorites());
     });
+
+
+    $('#showMap').click(function(event){
+      $('#faveCitiesButton').show();
+      $('#favoriteCities').hide();
+      $('#map').show();
+       map.setView(new L.LatLng(37.8, -96), 5);
+    });
+
+
 
 
        //Show favorites
@@ -390,7 +405,10 @@ $(function () {
 
     $('#faveCitiesButton').click(function(event){
       event.preventDefault();
-      this.remove();
+      $('h1').hide();
+      $('#faveCitiesButton').hide();
+      $('#showMap').show();
+      $('#favoriteCities').show();
       $.ajax({
         url: '/show/favorite_cities',
         dataType: 'json',
@@ -406,9 +424,9 @@ $(function () {
     });
 
 
-function appendCity(city){
-  showSpotsButton = $('<button class="showSpots">See spots</button>');
-  $('#favoriteCities').append($('<li id="' + city.id + '">' + city.name + '</li>').append(showSpotsButton));
+  function appendCity(city){
+    showSpotsButton = $('<button class="showSpots">See spots</button>');
+    $('#favoriteCities').append($('<li id="' + city.id + '">' + city.name + '</li>').append(showSpotsButton));
 
 
   showSpotsButton.click(function(){
