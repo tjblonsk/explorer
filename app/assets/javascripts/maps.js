@@ -14,7 +14,9 @@ var defaultCitiesMarkerArray = [];
 var nearbyHotelsArray = [];
 var placeHash = "";
 var yelpObject = "";
-
+var favoriteCitiesArray = "";
+var faveSpotsByCityArray = [];
+var spotDetailsArray = "";
 
 // put JS code in here
 $(function () {
@@ -52,7 +54,7 @@ $(function () {
     maxZoom: 18
   }).addTo(map);
 
-  // Call stuff down here somewhere
+
   // initialize the map on the "map" div
   L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
 
@@ -62,16 +64,40 @@ $(function () {
 
   map.setView(new L.LatLng(37.8, -96), 5);
 
-  var coffeeButton = $('#coffee');
-  var barsButton = $('#bars');
-  var trendingButton = $('#trending');
 
-   coffeeButton.click(function(event){
+    var coffeeButton = $('#coffee');
+    var barsButton = $('#bars'); //drinks?
+    var trendingButton = $('#trending');
+    var foodButton = $('#food');
+    var shopsButton = $('#shops');
+    var artsButton = $('#arts');
+    var outdoorsButton = $('#outdoors');
+    var sightsButton = $('#sights');
+    var topPicksButton = $('#topPicks');
+
+    var buttonArray = [
+    coffeeButton,
+    barsButton,
+    trendingButton,
+    foodButton,
+    shopsButton,
+    artsButton,
+    outdoorsButton,
+    sightsButton,
+    topPicksButton
+    ];
+
+
+
+  coffeeButton.on('click', searchButtonClick(coffeeButton));
+
+
+   function searchButtonClick(button){
     event.preventDefault();
-    buttonClickValue = coffeeButton.text();
-    coffeeButton.on('click', removeMarker());
-    // $('.navbar').append(buttonClickValue);
-  });
+    buttonClickValue = button.text();
+    removeMarker();
+    console.log(button.text());
+   }
 
    barsButton.click(function(event){
     event.preventDefault();
@@ -85,6 +111,37 @@ $(function () {
     trendingButton.on('click', removeMarker());
   });
 
+ foodButton.click(function(event){
+    event.preventDefault();
+    buttonClickValue = foodButton.text();
+    trendingButton.on('click', removeMarker());
+  });
+
+  trendingButton.click(function(event){
+    event.preventDefault();
+    buttonClickValue = trendingButton.text();
+    trendingButton.on('click', removeMarker());
+  });
+   trendingButton.click(function(event){
+    event.preventDefault();
+    buttonClickValue = trendingButton.text();
+    trendingButton.on('click', removeMarker());
+  });
+    trendingButton.click(function(event){
+    event.preventDefault();
+    buttonClickValue = trendingButton.text();
+    trendingButton.on('click', removeMarker());
+  });
+     trendingButton.click(function(event){
+    event.preventDefault();
+    buttonClickValue = trendingButton.text();
+    trendingButton.on('click', removeMarker());
+  });
+      trendingButton.click(function(event){
+    event.preventDefault();
+    buttonClickValue = trendingButton.text();
+    trendingButton.on('click', removeMarker());
+  });
 
 
     $('#showFavoritesButton').click(function(event){
@@ -213,6 +270,7 @@ $(function () {
   function favoriteClick(){
     $('#faveButton').click(function(event){
       event.preventDefault();
+      $('#faveButton').remove();
       spotToSave = spotsArray[$('.placeName').attr('Id')];
       console.log(spotToSave);
 
@@ -311,7 +369,83 @@ $(function () {
   }
   map.on('click', onMapClick);
 
-});
+
+
+    $('#faveCitiesButton').click(function(event){
+      event.preventDefault();
+      this.remove();
+      $.ajax({
+        url: '/show/favorite_cities',
+        dataType: 'json',
+        type: 'get'
+      }).done(function(data){
+        console.log(data);
+        favoriteCitiesArray = data;
+        $('#map').fadeOut();
+        for (var i = 0; i < favoriteCitiesArray.length; i ++){
+          appendCity(favoriteCitiesArray[i]);
+        }
+      });
+    });
+
+
+function appendCity(city){
+  showSpotsButton = $('<button class="showSpots">See spots</button>');
+  $('#favoriteCities').append($('<li id="' + city.id + '">' + city.name + '</li>').append(showSpotsButton));
+
+
+  showSpotsButton.click(function(){
+    $.ajax({
+    url: '/show/favorite_cities/' + city.name,
+    type: 'get',
+    dataType: 'json'
+    }).done(function(data){
+      console.log(data);
+      faveSpotsByCityArray = data;
+      for(var i = 0; i < faveSpotsByCityArray.length; i ++){
+        detailsButton = $('<button class="spotDetails" id="' + faveSpotsByCityArray[i].id +'">Details</button>');
+        detailsButton.click(function(){
+          detailsButton.remove();
+          id = this.id * 2;
+        $.ajax({
+         url: '/show/spot_details/' + this.id,
+         type: 'get',
+        dataType: 'json'
+        }).done(function(data){
+        console.log(data);
+        spotDetailsArray = data;
+        $('#' + id).append($('<ul></ul>')).append($('<li>' + spotDetailsArray.address + '</li>')).append($('<li>' + spotDetailsArray.phone + '</li>')).append($('<li>' + spotDetailsArray.website + '</li>'));
+      });
+    });
+        deleteButton = $('<button class="delete" id="' + faveSpotsByCityArray[i].id +'">Delete</button>');
+        deleteButton.click(function(){
+          id = this.id;
+          $('#' + id * 2).remove();
+          this.remove();
+          $('#' + id).remove();
+          $.ajax({
+            url: '/delete/' + id,
+            type: 'delete',
+            dataType: 'script'
+          }).done(function(data){
+            console.log(data);
+            alert("spot deleted!");
+          });
+        });
+
+        $('#' + faveSpotsByCityArray[i].city_id).append($('<ul></ul>').append($('<li id="' + faveSpotsByCityArray[i].id * 2 + '">' + faveSpotsByCityArray[i].name + '</li>')).append(detailsButton).append(deleteButton));
+      }
+    });
+  });
+
+
+}
+
+
+
+
+
+}); //closing function onload
 
 
 

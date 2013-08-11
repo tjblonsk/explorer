@@ -11,4 +11,12 @@ Explorer::Application.routes.draw do
 
   post '/send', to: 'maps#send_yelp'
 
+  get '/show/favorite_cities', to: 'maps#show_favorite_cities'
+
+  get '/show/favorite_cities/:name', to: 'maps#show_spots_by_city'
+
+  get '/show/spot_details/:id', to: 'maps#show_spot_details'
+
+  delete '/delete/:id', to: 'maps#destroy'
+
 end
