@@ -1,4 +1,4 @@
-// Put your structure for the 'map' and all its functions up here somewhere
+//globals primarily used for passing around json objects//
 var EMAPS = {
   latlng: {}
 };
@@ -23,6 +23,8 @@ $(function () {
 
   var map = new L.Map('map');
 
+  //get the coordinates of default cities markers//
+  //by clicking on them. Set the map view those coordinates//
   function markerClicked() {
   console.log(this.getLatLng().lat);
   lat = this.getLatLng().lat;
@@ -30,6 +32,7 @@ $(function () {
   map.setView(new L.LatLng(lat, lng), 13);
 }
 
+  //populate the map with default cities markers//
   function showCities(){
      $.ajax({
         type: 'get',
@@ -48,14 +51,14 @@ $(function () {
       });
     }
 
- // create a tile layer (or use other provider of your choice)
+ // create a tile layer (or use other provider of your choice)//
   var layer = L.tileLayer('http://{s}.tile.cloudmade.com/d45604d5730341f19ea4d665294a9c76/997/256/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> Contributors: <a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA</a>Imagery © <a href="http://cloudmade.com">CloudMade</a>',
     maxZoom: 18
   }).addTo(map);
 
 
-  // initialize the map on the "map" div
+  // initialize the map on the "map" div//
   L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
 
   map.on('load', function(e) {
@@ -91,7 +94,8 @@ $(function () {
       buttonArray[i].on('click', searchButtonClick(buttonArray[i]));
     }
 
-
+    //each button clicked sets the serach value (buttonClickValue)//
+    //to be passed into the 4square URL for API queries//
    function searchButtonClick(button){
     button.click(function(event){
      event.preventDefault();
@@ -106,7 +110,17 @@ $(function () {
     });
    }
 
+     //reset the map to its default view//
+    $('#showMap').click(function(event){
+      $('#faveCitiesButton').show();
+      $('#favoriteCities').hide();
+      $('#map').show();
+       map.setView(new L.LatLng(37.8, -96), 5);
+    });
 
+
+    //drop get a json object from db with all favorited spots//
+    //initalize setLocationFavorites function//
     $('#showFavoritesButton').click(function(event){
       event.preventDefault();
       buttonClickValue = "showFavorites";
@@ -124,17 +138,7 @@ $(function () {
     });
 
 
-    $('#showMap').click(function(event){
-      $('#faveCitiesButton').show();
-      $('#favoriteCities').hide();
-      $('#map').show();
-       map.setView(new L.LatLng(37.8, -96), 5);
-    });
-
-
-
-
-       //Show favorites
+    //drop markers on the favorited locations//
     function setLocationFavorites(){
     for (var i = 0; i < favoritesArray.length; i ++){
       trend = new L.LatLng(favoritesArray[i].latitude, favoritesArray[i].longitude);
@@ -145,19 +149,19 @@ $(function () {
     }
   }
 
-    //Remove favorites layer below
+    //Remove favorites layer below//
     function removeFavoritesLayer(){}
 
 
-  //add marker to map
-    //place name
-    //place address
-    //place URL
-    //yelp info (rating, expensive)
-    //link to search for hotels nearyb
-    //link to search for real estate nearby
+  //add marker to map//
+    //place name//
+    //place address//
+    //place URL//
+    //yelp info (rating, expensive)//
+    //link to search for hotels nearyb//
+    //link to search for real estate nearby//
   function setLocationTrending(){
-    //////trending or hotels
+    //trending or hotels//
     for (var i = 0; i < squareInfo.response.venues.length; i ++){
       lat = squareInfo.response.venues[i].location.lat;
       lng = squareInfo.response.venues[i].location.lng;
@@ -194,7 +198,7 @@ $(function () {
   $('#map').on('click', '#yelpButton', sendYelp);
 
 
-    //send the object to be used in the yelp request to the controller
+    //send the object to be used in the yelp request to the controller//
     function sendYelp(){
       $('#yelpButton').remove();
       objectForYelp = spotsArray[$('.placeName').attr('Id')];
@@ -220,7 +224,7 @@ $(function () {
     }
 
 
-    /////// For coffee shops
+    //setting markers for all searches other than trending and hotels//
     function setLocationOther(){
     for (var i = 0; i < squareInfo.response.groups[0].items.length; i ++){
       lat = squareInfo.response.groups[0].items[i].venue.location.lat;
@@ -255,7 +259,7 @@ $(function () {
     }
   }
 
-
+    //remove markers//
    function removeMarker(){
     for (var i = 0; i < markerArray.length; i ++){
       map.removeLayer(markerArray[i]);
@@ -263,6 +267,7 @@ $(function () {
   }
 
 
+  //save a location//
   function favoriteClick(){
     $('#faveButton').click(function(event){
       event.preventDefault();
@@ -294,10 +299,7 @@ $(function () {
   $('#map').on('click', '#faveButton', favoriteClick);
 
 
-
-
-
-    //click hotel button to show nearby hotels
+    //click hotel button to show nearby hotels//
     function hotelButtonClick(){
       $('#hotelsButton').click(function(event){
       event.preventDefault();
@@ -354,7 +356,7 @@ $(function () {
   $('#map').on('click', '#hotelsButton', hotelButtonClick);
 
 
-  // var popup = L.popup();
+  //pin markers based on the buttonClickValue and lat and lng//
   function onMapClick(e) {
       removeMarker();
       EMAPS.latlng = e.latlng;
@@ -403,7 +405,7 @@ $(function () {
   map.on('click', onMapClick);
 
 
-
+    //get json object of cities containing favorited locations//
     $('#faveCitiesButton').click(function(event){
       event.preventDefault();
       $('h1').hide();
@@ -424,7 +426,7 @@ $(function () {
       });
     });
 
-
+  //append list of cities to the page//
   function appendCity(city){
     showSpotsButton = $('<button class="showSpots">See spots</button>');
     $('#favoriteCities').append($('<li id="' + city.id + '">' + city.name + '</li>').append(showSpotsButton));
@@ -466,21 +468,13 @@ $(function () {
           }).done(function(data){
             console.log(data);
             alert("spot deleted!");
+            });
           });
-        });
-
         $('#' + faveSpotsByCityArray[i].city_id).append($('<ul></ul>').append($('<li id="' + faveSpotsByCityArray[i].id * 2 + '">' + faveSpotsByCityArray[i].name + '</li>')).append(detailsButton).append(deleteButton));
-      }
+        }
+      });
     });
-  });
-
-
-}
-
-
-
-
-
+  }
 }); //closing function onload
 
 
